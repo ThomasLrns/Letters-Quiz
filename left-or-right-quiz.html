@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Left or Right Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div style="margin-bottom:24px;text-align:right;">
+            <label for="language-select" style="font-size:1em;margin-right:8px;">Language:</label>
+            <select id="language-select" style="font-size:1em;padding:4px 8px;">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+            </select>
+        </div>
+        <h1 data-translate-key="leftOrRightTitle">Left or Right Quiz</h1>
+        <div id="score-timer-wrapper" style="font-size:1.1em;margin-bottom:12px;">
+            <span id="score-counter">Score: 0</span>
+            <span id="timer" style="margin-left:16px;">Time: 0s</span>
+        </div>
+        <button id="start-btn" data-translate-key="startBtn" style="margin-bottom:16px;">Start Quiz</button>
+        <div id="quiz">
+            <img id="symbol-img" src="" alt="Symbol" style="width:120px;height:120px;object-fit:contain;border:1px solid #ddd;border-radius:8px;background:#BEBEBE;margin-bottom:24px;" />
+            <div id="options"></div>
+            <div id="feedback"></div>
+            <button id="next-btn" style="display:none;">Next</button>
+        </div>
+        <div id="result" style="display:none;"></div>
+        <button id="restart-btn" style="display:none;margin-top:16px;">Restart Quiz</button>
+        <button id="back-btn" data-translate-key="backBtn" onclick="location.href='home.html'" style="margin-top:16px;">Back to Home Page</button>
+    </div>
+    <script src="lang.js"></script>
+    <script src="left-or-right-app.js"></script>
+</body>
+</html>
