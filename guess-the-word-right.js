@@ -11,6 +11,7 @@ if (localStorage.getItem('selectedLang') === 'fr') {
     if (typeof frenchWords !== 'undefined') {
         words = frenchWords;
     }
+}
 const imageBasePath = "Right letters/";
 
 let quizPool = [...words];
@@ -116,6 +117,34 @@ function pickQuestion() {
     document.getElementById('submit-btn').disabled = false;
 }
 
+// ...existing code...
+
+// Update input, submit, and feedback on language change
+document.getElementById('language-select')?.addEventListener('change', () => {
+    // Update localStorage with selected language
+    const select = document.getElementById('language-select');
+    if (select) localStorage.setItem('selectedLang', select.value);
+    // Update word list and quiz pool
+    let lang = select ? select.value : 'en';
+    words = (lang === 'fr' && typeof frenchWords !== 'undefined') ? frenchWords : englishWords;
+    quizPool = [...words];
+    updateInputAndSubmit();
+    // Re-translate feedback if visible
+    const feedback = document.getElementById('feedback');
+    if (feedback && feedback.textContent) {
+        const correctMsg = (window.translations && window.translations[lang] && window.translations[lang].correctFeedback) ? window.translations[lang].correctFeedback : 'Correct!';
+        const wrongMsg = (window.translations && window.translations[lang] && window.translations[lang].wrongFeedback) ? window.translations[lang].wrongFeedback : 'Wrong! The correct answer was';
+        if (feedback.classList.contains('feedback-correct')) {
+            feedback.textContent = correctMsg;
+        } else if (feedback.classList.contains('feedback-wrong')) {
+            // Extract the answer from the previous feedback
+            const match = feedback.textContent.match(/(?:was|était) (.+)\.?$/);
+            const answer = match ? match[1] : '';
+            feedback.textContent = `${wrongMsg} ${answer}.`;
+        }
+    }
+});
+
 function checkAnswer() {
     const userInput = document.getElementById('answer-input').value.trim().toUpperCase();
     document.getElementById('answer-input').disabled = true;
@@ -134,52 +163,11 @@ function checkAnswer() {
         feedback.classList.remove('feedback-correct');
         feedback.classList.add('feedback-wrong');
     }
-}
-
-// Update input, submit, and feedback on language change
-document.getElementById('language-select')?.addEventListener('change', () => {
-    updateInputAndSubmit();
-    // Re-translate feedback if visible
-    const feedback = document.getElementById('feedback');
-    if (feedback && feedback.textContent) {
-        const lang = getLang();
-        const correctMsg = (window.translations && window.translations[lang] && window.translations[lang].correctFeedback) ? window.translations[lang].correctFeedback : 'Correct!';
-        const wrongMsg = (window.translations && window.translations[lang] && window.translations[lang].wrongFeedback) ? window.translations[lang].wrongFeedback : 'Wrong! The correct answer was';
-        if (feedback.classList.contains('feedback-correct')) {
-            feedback.textContent = correctMsg;
-        } else if (feedback.classList.contains('feedback-wrong')) {
-            // Extract the answer from the previous feedback
-            const match = feedback.textContent.match(/(?:was|était) (.+)\.?$/);
-            const answer = match ? match[1] : '';
-            feedback.textContent = `${wrongMsg} ${answer}.`;
-        }
-    }
-});
-// Update input, submit, and feedback on language change
-document.getElementById('language-select')?.addEventListener('change', () => {
-    updateInputAndSubmit();
-    // Re-translate feedback if visible
-    const feedback = document.getElementById('feedback');
-    if (feedback && feedback.textContent) {
-        const lang = getLang();
-        const correctMsg = (window.translations && window.translations[lang] && window.translations[lang].correctFeedback) ? window.translations[lang].correctFeedback : 'Correct!';
-        const wrongMsg = (window.translations && window.translations[lang] && window.translations[lang].wrongFeedback) ? window.translations[lang].wrongFeedback : 'Wrong! The correct answer was';
-        if (feedback.classList.contains('feedback-correct')) {
-            feedback.textContent = correctMsg;
-        } else if (feedback.classList.contains('feedback-wrong')) {
-            // Extract the answer from the previous feedback
-            const match = feedback.textContent.match(/(?:was|était) (.+)\.?$/);
-            const answer = match ? match[1] : '';
-            feedback.textContent = `${wrongMsg} ${answer}.`;
-        }
-    }
-});
     quizPool = quizPool.filter(w => w !== currentWord);
     tried++;
     updateScore();
     const nextBtn = document.getElementById('next-btn');
     if (window.translations) {
-        const lang = getLang();
         nextBtn.textContent = (window.translations[lang] && window.translations[lang].next) ? window.translations[lang].next : 'Next';
     }
     nextBtn.style.display = 'inline-block';
@@ -236,5 +224,4 @@ function showStart() {
 }
 
 showStart();
-// Update input and submit on language change
-document.getElementById('language-select')?.addEventListener('change', updateInputAndSubmit);
+// ...existing code...
